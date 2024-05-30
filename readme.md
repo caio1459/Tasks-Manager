@@ -6,7 +6,7 @@ Este projeto foi criado para aprofundar meus estodos em golang, Docker e Nest.js
 ## 🔨 Ferramentas e Bibliotecas
 - [Golang](https://go.dev)
 - [MySQL](https://www.mysql.com/)
-- [Next.js](https://nextjs.org)
+- [React.js](https://react.dev)
 - [JWT](https://jwt.io/)
 
 ## 🦾 Iniciando o Projeto
