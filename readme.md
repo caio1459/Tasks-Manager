@@ -31,7 +31,7 @@ Para executar o projeto, siga os passos abaixo:
     ./tasksmanager
     ```
 
-4. Abra o projeto no VSCode e execute o script SQL contido no arquivo `api/sql/tasksmanager.sql` no banco de dados MySQL para criar a estrutura necessária.
+4. Abra o projeto no VSCode e execute o script SQL contido no arquivo `sql/tasksmanager.sql` no banco de dados MySQL para criar a estrutura necessária.
 
     Agora, a API estará disponível para uso localmente. Certifique-se de ajustar as configurações e váriaveis de ambiente conforme necessário.
 

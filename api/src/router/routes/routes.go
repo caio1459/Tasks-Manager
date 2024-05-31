@@ -20,6 +20,7 @@ func RouteConfig(r *mux.Router) *mux.Router {
 	routes := routesUsers
 	//Adiciona mais rotas
 	routes = append(routes, routeLogin)
+	routes = append(routes, routesCategories...)
 
 	//Separa as rotas existentes
 	for _, route := range routes {

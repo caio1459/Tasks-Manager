@@ -8,38 +8,30 @@ import { TarefasProvider } from './contexts/tarefaContext'
 
 Modal.setAppElement('#root')
 
-// dontpad.com/profchines
 function App() {
+  const [isVisibleModal, setIsVisibleModal] = useState(false)
+  const abrirModal = () => setIsVisibleModal(true)
+  const fecharModal = () => setIsVisibleModal(false)
 
-    const [isVisibleModal, setIsVisibleModal] = useState(false)
+  return (
+    <>
+      <TarefasProvider>
+        <GlobalStyle />
+        <Header
+          abrirModal={abrirModal}
+        />
 
-    function abrirModal() {
-        setIsVisibleModal(true)
-    }
+        <ListTarefas
+          abrirModal={abrirModal}
+        />
 
-    function fecharModal() {
-        setIsVisibleModal(false)
-    }
-
-    return (
-        <>
-            <TarefasProvider>
-                <GlobalStyle />
-                <Header
-                    abrirModal={abrirModal}
-                />
-
-                <ListTarefas
-                    abrirModal={abrirModal}
-                />
-
-                <CustomModal
-                    modalVisible={isVisibleModal}
-                    fecharModal={fecharModal}
-                />
-            </TarefasProvider>
-        </>
-    )
+        <CustomModal
+          modalVisible={isVisibleModal}
+          fecharModal={fecharModal}
+        />
+      </TarefasProvider>
+    </>
+  )
 }
 
 export default App

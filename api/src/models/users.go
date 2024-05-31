@@ -33,7 +33,7 @@ func (user *User) validate(stage string) error {
 	return nil
 }
 
-// Fução responsavel por formatar strings e cryptografar senhas
+// Função responsavel por formatar strings e cryptografar senhas
 func (user *User) formatStrings(stage string) error {
 	user.Name = strings.TrimSpace(user.Name)
 	user.Email = strings.TrimSpace(user.Email)

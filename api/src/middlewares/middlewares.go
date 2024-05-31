@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/caio1459/tasksmanager/src/authentication"
 	"github.com/caio1459/tasksmanager/src/responses"
@@ -20,19 +21,26 @@ func Authenticate(next http.HandlerFunc) http.HandlerFunc {
 	}
 }
 
-// Gera logs de rotas
+// Logger é um middleware que registra os logs das requisições HTTP
 func Logger(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		// Abrir ou criar um arquivo de logs
-		file, err := os.OpenFile("logfile.log", os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
+		// Definir o caminho do arquivo de log
+		logDir := "logs"
+		logFile := filepath.Join(logDir, "logfile.log")
+		// Criar o diretório de logs se não existir
+		if err := os.MkdirAll(logDir, os.ModePerm); err != nil {
+			log.Fatalf("Erro ao criar o diretório de logs: %v", err)
+		}
+		// Abrir ou criar o arquivo de logs
+		file, err := os.OpenFile(logFile, os.O_CREATE|os.O_APPEND|os.O_WRONLY, 0666)
 		if err != nil {
-			log.Fatal("Erro ao abrir o arquivo de logs:", err)
+			log.Fatalf("Erro ao abrir o arquivo de logs: %v", err)
 		}
 		defer file.Close()
 		// Configurar o logger para escrever no arquivo
 		log.SetOutput(file)
 		log.Printf(" | Método: %s | URI: %s", r.Method, r.RequestURI)
-
+		// Chamar o próximo handler na cadeia
 		next(w, r)
 	}
 }

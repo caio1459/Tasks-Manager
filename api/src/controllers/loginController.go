@@ -47,14 +47,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, _ := authentication.GenerateToken(savedUser.ID)
+	token, err := authentication.GenerateToken(savedUser.ID)
 	if err != nil {
 		responses.Erro(w, http.StatusInternalServerError, err)
 		return
 	}
 
 	response := models.ResponseLogin{
-		User:  savedUser,
 		Token: token,
 	}
 
