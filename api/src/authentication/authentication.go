@@ -17,7 +17,7 @@ func GenerateToken(id uint64) (string, error) {
 	// Gera permições
 	permissions := jwt.MapClaims{}
 	permissions["authorized"] = true                          //Usuário autorizado
-	permissions["exp"] = time.Now().Add(time.Hour * 6).Unix() //Validade de 6 horas do token
+	permissions["exp"] = time.Now().Add(time.Hour * 2).Unix() //Validade de 2 horas do token
 	permissions["user_id"] = id                               //Define o que ter no token
 	// Cria o token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)

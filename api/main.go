@@ -20,7 +20,7 @@ func main() {
 	// Adicione o manipulador CORS aqui para autorização de outras aplicações
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
-	origins := handlers.AllowedOrigins([]string{"http://localhost:3001"}) 
+	origins := handlers.AllowedOrigins([]string{"http://localhost:3000"}) 
 
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%v", os.Getenv("PORT")), handlers.CORS(headers, methods, origins)(r)))
 }
