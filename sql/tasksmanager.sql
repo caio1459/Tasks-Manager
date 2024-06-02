@@ -1,9 +1,5 @@
 CREATE DATABASE IF NOT EXISTS tasksmanager;
 
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS tasks;
-DROP TABLE IF EXISTS categories;
-
 CREATE TABLE  `tasksmanager`.`users` (
     `user_id` INT NOT NULL AUTO_INCREMENT, 
     `name` VARCHAR(30) NOT NULL , 
