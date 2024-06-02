@@ -12,6 +12,7 @@ interface CategoryModalProps extends IPropsModal {
 
 export const CategoryModal = ({ modalVisible, fecharModal, fechCategory }: CategoryModalProps) => {
   const { register, handleSubmit, reset } = useForm();
+  //atorização rotas(axios api)
   const { headers } = useContext(AuthContext);
 
   const closeModal = useCallback(() => {
@@ -20,9 +21,11 @@ export const CategoryModal = ({ modalVisible, fecharModal, fechCategory }: Categ
   }, [fecharModal, reset]);
 
   const createCategory = useCallback((data: {}) => {
+    // task
     axios.post("http://localhost:5000/api/category", data, headers)
       .then(() => {
         closeModal();
+        //nãp precisa
         fechCategory();
       })
       .catch((err) => console.error(err));
