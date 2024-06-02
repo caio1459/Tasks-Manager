@@ -1,44 +1,32 @@
-import { FormEvent, useContext, useEffect, useState } from 'react'
-import Modal from 'react-modal'
-import { FormContainer } from './styles'
-import { ICategory } from '../../interfaces/interfaces';
-import axios from 'axios';
-import { AuthContext } from '../../contexts/AuthContext';
+import Modal from 'react-modal';
+import { ICategory, IPropsModal } from '../../interfaces/interfaces';
+import React, { FormEvent, useState } from 'react';
+import { FormContainer } from '../../styles/global';
 
-interface PropsModal {
-  modalVisible: boolean;
-  fecharModal: () => void;
+interface TaskModalProps extends IPropsModal {
+  categories: ICategory[];
 }
 
-export const TaskModal = (props: PropsModal) => {
-  const [titulo, setTitulo] = useState('')
-  const [descricao, setDescricao] = useState('')
-  const [quadro, setQuadro] = useState('quadro1')
-  const [categories, setCategories] = useState<ICategory[]>([])
-  const { headers } = useContext(AuthContext)
-
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/category", headers,)
-      .then(res => setCategories(res.data))
-      .catch(err => console.error(err))
-  }, [])
+export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal, categories }) => {
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [quadro, setQuadro] = useState('quadro1');
 
   function limparCamposEFecharModal() {
-    setTitulo('')
-    setDescricao('')
-    setDescricao('quadro1')
-    props.fecharModal()
+    setTitulo('');
+    setDescricao('');
+    setQuadro('quadro1');
+    fecharModal();
   }
 
-  // onSubmitModal
   function criarTarefa(event: FormEvent) {
-    event.preventDefault()
-    limparCamposEFecharModal()
+    event.preventDefault();
+    limparCamposEFecharModal();
   }
 
   return (
     <Modal
-      isOpen={props.modalVisible}
+      isOpen={modalVisible}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
       onRequestClose={limparCamposEFecharModal}
@@ -51,9 +39,7 @@ export const TaskModal = (props: PropsModal) => {
         X
       </button>
 
-      <FormContainer
-        onSubmit={criarTarefa}
-      >
+      <FormContainer onSubmit={criarTarefa}>
         <h2>Cadastrar Tarefa</h2>
         <input
           type="text"
@@ -61,7 +47,6 @@ export const TaskModal = (props: PropsModal) => {
           required
           value={titulo}
           onChange={(event) => setTitulo(event.target.value)}
-
         />
         <textarea
           placeholder='Descriçao'
@@ -73,19 +58,16 @@ export const TaskModal = (props: PropsModal) => {
           value={quadro}
           onChange={(val) => setQuadro(val.target.value)}
         >
-          {
-            categories.map(category => (
-              <option key={category.id} value={category.description}>
-                {category.description}
-              </option>
-            ))
-          }
+          {categories.map(category => (
+            <option key={category.id} value={category.description}>
+              {category.description}
+            </option>
+          ))}
         </select>
         <button type='submit'>
           Cadastrar
         </button>
       </FormContainer>
-
     </Modal>
-  )
-}
+  );
+};

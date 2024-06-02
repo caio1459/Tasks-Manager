@@ -47,5 +47,5 @@ Para executar o projeto, siga os passos abaixo:
 
 6. Inicie o servidor, certificando-se de ter a API rodando
     ```bash
-    npm run dev
+    npm start
     ```

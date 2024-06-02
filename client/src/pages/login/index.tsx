@@ -27,6 +27,7 @@ export const Login = () => {
       .catch(() => setError('Falha ao logar. Por favor, verifique os dados informados.'))
   }, [reset])
 
+  //Seta o erro como vazio sempre o que for digitado alguma coisa
   const handleInputChange = () => {
     if (error) setError('');
   };
