@@ -1,133 +1,47 @@
-import { useContext } from 'react'
+import React from 'react';
 import { Container } from "./styles";
-import { TarefaContext } from '../../contexts/tarefaContext';
+import { ITasks } from '../../interfaces/interfaces';
 
 interface PropsListTarefas {
-    abrirModal: () => void;
+  abrirModal: () => void;
+  tasks: ITasks[];
 }
 
-export function ListTarefas(props: PropsListTarefas) {
+export const ListTarefas: React.FC<PropsListTarefas> = ({ abrirModal, tasks }) => {
+  //Cria um agrupamento por categoria
+  const tarefasPorCategoria = tasks.reduce((acc, tarefa) => {
+    const categoria = tarefa.category.description;
+    if (!acc[categoria]) {
+      acc[categoria] = [];
+    }
+    acc[categoria].push(tarefa);
+    return acc;
+  }, {} as Record<string, ITasks[]>);
 
-    const { tarefas, funEditarTarefa } = useContext(TarefaContext)
-
-    return (
-        <>
-            <Container>
-                <ul>
-                    <h3>
-                        Quadro 1
-                    </h3>
-
-                    {
-                        tarefas.map((tarefa, index) => {
-                            return (
-                                tarefa.quadro === 'quadro1' ?
-                                    <li
-                                        key={index}
-                                    >
-                                        <div>
-                                            <h4>
-                                                {tarefa.titulo}
-                                            </h4>
-                                            <p>{tarefa.descricao}</p>
-                                        </div>
-                                        <div>
-                                            <button
-                                                type='button'
-                                                onClick={() => {
-                                                    funEditarTarefa({ editar: true, tarefa: tarefa })
-                                                    props.abrirModal();
-                                                }}
-                                            >
-                                                Editar
-                                            </button>
-                                        </div>
-
-                                    </li>
-                                    :
-                                    <></>
-                            )
-                        })
-                    }
-
-                </ul>
-                <ul>
-                    <h3>
-                        Quadro 2
-                    </h3>
-
-                    {
-                        tarefas.map((tarefa, index) => {
-                            return (
-                                tarefa.quadro === 'quadro2' ?
-                                    <li
-                                        key={index}
-                                    >
-                                        <div>
-                                            <h4>
-                                                {tarefa.titulo}
-                                            </h4>
-                                            <p>{tarefa.descricao}</p>
-                                        </div>
-                                        <div>
-                                            <button
-                                                type='button'
-                                                onClick={() => {
-                                                    funEditarTarefa({ editar: true, tarefa: tarefa })
-                                                    props.abrirModal();
-                                                }}
-                                            >
-                                                Editar
-                                            </button>
-                                        </div>
-
-                                    </li>
-                                    :
-                                    <></>
-                            )
-                        })
-                    }
-
-                </ul>
-                <ul>
-                    <h3>
-                        Quadro 3
-                    </h3>
-
-                    {
-                        tarefas.map((tarefa, index) => {
-                            return (
-                                tarefa.quadro === 'quadro3' ?
-                                <li
-                                    key={index}
-                                >
-                                    <div>
-                                        <h4>
-                                            {tarefa.titulo}
-                                        </h4>
-                                        <p>{tarefa.descricao}</p>
-                                    </div>
-                                    <div>
-                                        <button
-                                            type='button'
-                                            onClick={() => {
-                                                funEditarTarefa({editar: true, tarefa: tarefa})
-                                                props.abrirModal();
-                                            }}
-                                        >
-                                            Editar
-                                        </button>
-                                    </div>
-
-                                </li>
-                                :
-                                <></>
-                            )
-                        })
-                    }
-
-                </ul>
-            </Container>
-        </>
-    )
-}
+  return (
+    <Container>
+      {
+        Object.keys(tarefasPorCategoria).map((categoria) => (
+          <ul key={categoria}>
+            <h3>{categoria}</h3>
+            {
+              tarefasPorCategoria[categoria].map((tarefa, index) => (
+                <li key={index}>
+                  <div>
+                    <h3>{tarefa.title}</h3>
+                    <p>{tarefa.description}</p>
+                  </div>
+                  <div>
+                    <button type='button' onClick={abrirModal}>
+                      Editar
+                    </button>
+                  </div>
+                </li>
+              ))
+            }
+          </ul>
+        ))
+      }
+    </Container>
+  );
+};

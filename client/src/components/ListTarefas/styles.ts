@@ -6,9 +6,7 @@ export const Container = styled.div`
   margin-right: 1rem;
   display: flex;
   justify-content: center;
-
   flex-wrap: wrap;
-
   ul {
     width: 30rem;
     border-radius: 8px;

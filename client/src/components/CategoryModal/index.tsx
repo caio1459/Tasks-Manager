@@ -25,7 +25,7 @@ export const CategoryModal = ({ modalVisible, fecharModal, fechCategory }: Categ
     axios.post("http://localhost:5000/api/category", data, headers)
       .then(() => {
         closeModal();
-        //nãp precisa
+        //Reseta o estado so componente pai
         fechCategory();
       })
       .catch((err) => console.error(err));
