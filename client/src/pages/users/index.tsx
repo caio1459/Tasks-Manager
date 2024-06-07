@@ -1,5 +1,5 @@
 export const Users = () => {
   return (
-    <h1>Novo usuario</h1>
+    <h1>Cadastrar Usuario usuario</h1>
   )
 }
