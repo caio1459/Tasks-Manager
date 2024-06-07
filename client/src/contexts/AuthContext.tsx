@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios"
-import React, { createContext} from "react"
+import React, { createContext, useEffect, useState } from "react"
 import Cookies from 'js-cookie';
 
 interface IPropsAuthContext {
@@ -13,17 +13,25 @@ interface IPropsAuthContextProvider {
 export const AuthContext = createContext<IPropsAuthContext>({} as IPropsAuthContext)
 
 export const AuthContextProvider: React.FC<IPropsAuthContextProvider> = ({ children }) => {
-  let token = "";
+  const [headers, setHeaders] = useState<AxiosRequestConfig>({})
+  const [token, setToken] = useState<string | null>(null);
 
-  if (typeof window !== 'undefined') {
-    token = Cookies.get("@tasks:token") || ""
-  }
+  useEffect(() => {
+    const token = Cookies.get("@tasks:token");
+    if (token) {
+      setToken(token);
+    };
+  }, []);
 
-  const headers: AxiosRequestConfig = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
+  useEffect(() => {
+    if (token) {
+      setHeaders({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
+  }, [token]);
 
   return (
     <AuthContext.Provider

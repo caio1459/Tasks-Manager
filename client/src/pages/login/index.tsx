@@ -1,9 +1,10 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { Container, Title, Input, Button, LinkContainer, Form, FormContainer, ErrorMessage } from './style';
+import { useNavigate } from 'react-router-dom';
+import { Container, Title, Input, Button, Form, FormContainer, ErrorMessage, DivBtn } from './style';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
 
 export const Login = () => {
   const { register, handleSubmit, reset } = useForm()
@@ -50,15 +51,17 @@ export const Login = () => {
             onChange={handleInputChange}
           />
           {error && <ErrorMessage>{error}</ErrorMessage>}
-          <LinkContainer>
-            <Link to={''}>Esqueceu a senha?</Link>
-            <Link to={''}>Criar uma conta</Link>
-          </LinkContainer>
-          <Button type="submit">
+          <div className='d-flex'>
+            <a className='me-5' href=''>Esqueceu a senha?</a>
+            <Link to={'/users'}>Criar uma conta</Link>
+          </div>
+          <Button title='Logar' type="submit">
             Logar
           </Button>
-          <Button>Google</Button>
-          <Button>Microsoft</Button>
+          <DivBtn>
+            <Button title='Google'><i className="bi bi-google"></i></Button>
+            <Button title='Microsoft'><i className="bi bi-microsoft"></i></Button>
+          </DivBtn>
         </Form>
       </FormContainer>
     </Container>

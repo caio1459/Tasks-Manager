@@ -2,11 +2,11 @@ import { createGlobalStyle, styled } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
     :root {
-        --background: #0067a3;
-        --blue: #004269;
+        --background: #221d21;
+        --blue: #f77014;
         --text-body: #363f5f;
         --background-modal: #f0f2f5;
-        --blue-light: #6933ff;
+        --blue-light: #221d21;
     }
 
     * {
@@ -64,7 +64,7 @@ export const GlobalStyle = createGlobalStyle`
 `;
 export const FormContainer = styled.form`
   h2 {
-    color: var(--blue);
+    color: #221d21;
     font-size: 1.5rem;
     margin-bottom: 2rem;
   }

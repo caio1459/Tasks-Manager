@@ -7,7 +7,8 @@ export const Container = styled.header`
   align-items: center;
   justify-content: space-between;
   h1 {
-    color: #fff;
+    color: var(--blue-light);
+    font-weight: 700;
   }
 
   button {
@@ -21,12 +22,22 @@ export const Container = styled.header`
     transition: 1s;
     &:hover {
       /* filter: brightness(0.9); */
-      background-color: #f00;
+      background-color: #433d3d;
     }
   }
 
-  div{
+  div {
     display: flex;
     gap: 20px;
+  }
+  .btn-logout {
+    padding: 0;
+    font-size: 1rem;
+    color: #fff;
+    background-color: var(--blue-light);
+    height: 3rem;
+    width: 3rem;
+    text-align: center;
+    border-radius: 100px;
   }
 `;
