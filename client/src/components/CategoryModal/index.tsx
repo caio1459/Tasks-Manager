@@ -12,7 +12,6 @@ interface CategoryModalProps extends IPropsModal {
 
 export const CategoryModal = ({ modalVisible, fecharModal, fechCategory }: CategoryModalProps) => {
   const { register, handleSubmit, reset } = useForm();
-  //atorização rotas(axios api)
   const { headers } = useContext(AuthContext);
 
   const closeModal = useCallback(() => {
