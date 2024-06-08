@@ -1,26 +1,27 @@
-import { AxiosRequestConfig } from "axios"
-import React, { createContext, useEffect, useState } from "react"
+import { AxiosRequestConfig } from "axios";
+import React, { createContext, useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 
 interface IPropsAuthContext {
-  headers: AxiosRequestConfig
+  headers: AxiosRequestConfig;
+  setToken: (token: string) => void;
 }
 
 interface IPropsAuthContextProvider {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export const AuthContext = createContext<IPropsAuthContext>({} as IPropsAuthContext)
+export const AuthContext = createContext<IPropsAuthContext>({} as IPropsAuthContext);
 
 export const AuthContextProvider: React.FC<IPropsAuthContextProvider> = ({ children }) => {
-  const [headers, setHeaders] = useState<AxiosRequestConfig>({})
+  const [headers, setHeaders] = useState<AxiosRequestConfig>({});
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const token = Cookies.get("@tasks:token");
-    if (token) {
-      setToken(token);
-    };
+    const savedToken = Cookies.get("@tasks:token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
   }, []);
 
   useEffect(() => {
@@ -34,12 +35,8 @@ export const AuthContextProvider: React.FC<IPropsAuthContextProvider> = ({ child
   }, [token]);
 
   return (
-    <AuthContext.Provider
-      value={{
-        headers
-      }}
-    >
+    <AuthContext.Provider value={{ headers, setToken }}>
       {children}
     </AuthContext.Provider>
-  )
-}
+  );
+};

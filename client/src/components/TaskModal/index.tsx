@@ -1,6 +1,6 @@
 import Modal from 'react-modal';
-import { ICategory, IPropsModal } from '../../interfaces/interfaces';
-import React, { useCallback, useContext } from 'react';
+import { ICategory, IPropsModal, ITasks } from '../../interfaces/interfaces';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { FormContainer } from '../../styles/global';
 import { AuthContext } from '../../contexts/AuthContext';
 import { useForm } from 'react-hook-form';
@@ -8,21 +8,31 @@ import axios from 'axios';
 import { SelectContainer } from './style';
 
 interface TaskModalProps extends IPropsModal {
+  task?: ITasks;
   categories: ICategory[];
   fechTasks: () => void;
 }
 
-export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal, categories, fechTasks }) => {
-  const { register, handleSubmit, reset } = useForm();
-  const { headers } = useContext(AuthContext);   // Autorização de rotas (axios api)
+export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal, task, categories, fechTasks }) => {
+  const { register, handleSubmit, reset, setValue } = useForm();
+  const { headers } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (task) {
+      setValue('title', task.title);
+      setValue('description', task.description);
+      setValue('category', task.category.description);
+    } else {
+      reset();
+    }
+  }, [task, setValue, reset]);
 
   const closeModal = useCallback(() => {
     reset();
     fecharModal();
   }, [fecharModal, reset]);
 
-  const criarTarefa = useCallback((data: { title?: string, description?: string, category?: string }) => {
-    // Encontrar a categoria selecionada com base na descrição
+  const onSubmit = useCallback((data: { title?: string, description?: string, category?: string }) => {
     const selectedCategory = categories.find(category => category.description === data.category);
 
     const payload = {
@@ -31,14 +41,15 @@ export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal,
       category: selectedCategory
     };
 
-    axios.post("http://localhost:5000/api/task", payload, headers)
-      .then(() => {
-        closeModal();
-        //Reseta o estado so componente pai
-        fechTasks();
-      })
-      .catch((err) => console.error(err));
-  }, [headers, closeModal, fechTasks, categories]);
+    const request = task
+      ? axios.put(`http://localhost:5000/api/task/${task.task_id}`, payload, headers)
+      : axios.post("http://localhost:5000/api/task", payload, headers);
+
+    request.then(() => {
+      closeModal();
+      fechTasks();
+    }).catch((err) => console.error(err));
+  }, [headers, closeModal, fechTasks, categories, task]);
 
   return (
     <Modal
@@ -51,8 +62,8 @@ export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal,
         X
       </button>
 
-      <FormContainer onSubmit={handleSubmit(criarTarefa)}>
-        <h2>Cadastrar Tarefa</h2>
+      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+        <h2>{task ? "Editar Tarefa" : "Cadastrar Tarefa"}</h2>
         <input type="text" placeholder='Titulo' required {...register("title")} />
         <textarea
           placeholder='Descrição'
@@ -73,7 +84,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({ modalVisible, fecharModal,
           </select>
         </SelectContainer>
         <button type='submit'>
-          Cadastrar
+          {task ? "Salvar" : "Cadastrar"}
         </button>
       </FormContainer>
     </Modal>

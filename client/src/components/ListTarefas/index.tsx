@@ -5,7 +5,7 @@ import axios from 'axios';
 import { AuthContext } from '../../contexts/AuthContext';
 
 interface PropsListTarefas {
-  abrirModal: () => void;
+  abrirModal: (task?: ITasks) => void;
   tasks: ITasks[];
   fechTask: () => void;
 }
@@ -15,9 +15,11 @@ export const ListTarefas: React.FC<PropsListTarefas> = ({ abrirModal, tasks, fec
 
   async function deleteList(id_list: number) {
     try {
-      const { data } = await axios.delete("http://localhost:5000/api/task/" + id_list, headers);
-      console.log(data)
-      fechTask()
+      if (confirm('Deseja excluir essa tarefa?')) {
+        const { data } = await axios.delete("http://localhost:5000/api/task/" + id_list, headers);
+        window.alert(data)
+        fechTask()
+      }
     } catch (error) {
       console.log(error)
       alert('Task error')
@@ -49,7 +51,7 @@ export const ListTarefas: React.FC<PropsListTarefas> = ({ abrirModal, tasks, fec
                     <p>{tarefa.description}</p>
                   </div>
                   <div>
-                    <button type='button' className='btn btn-info' onClick={abrirModal}>
+                    <button type='button' className='btn btn-info' onClick={() => abrirModal(tarefa)}>
                       <i className="bi bi-pen"></i>
                     </button>
                     <button

@@ -2,33 +2,41 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Title, Input, Button, Form, FormContainer, ErrorMessage, DivBtn } from './style';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 export const Login = () => {
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset } = useForm();
   const [error, setError] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const { setToken } = useContext(AuthContext);
 
   useEffect(() => {
-    const cokkie = Cookies.get("@tasks:token")
-    if (cokkie) navigate('/home')
-  }, [])
+    const cookie = Cookies.get("@tasks:token");
+    if (cookie) navigate('/home');
+  }, [navigate]);
 
-  const onSubmit = useCallback((data: {}) => {
-    axios.post("http://localhost:5000/api/login", data)
-      .then((res) => {
-        const twoHours = new Date(new Date().getTime() + 2 * 60 * 60 * 1000); // Validade de 2 horas a partir de agora
-        Cookies.set("@tasks:token", res.data.token, { expires: twoHours }) //Seta o valor do cokkie
-        reset()
-        setError('')
-        navigate('/home')
-      })
-      .catch(() => setError('Falha ao logar. Por favor, verifique os dados informados.'))
-  }, [reset])
+  const onSubmit = useCallback(async (data: {}) => {
+    try {
+      const response = await axios.post("http://localhost:5000/api/login", data);
+      const twoHours = new Date(new Date().getTime() + 2 * 60 * 60 * 1000); // Validade de 2 horas a partir de agora
+      Cookies.set("@tasks:token", response.data.token, { expires: twoHours }); // Seta o valor do cookie
 
-  //Seta o erro como vazio sempre o que for digitado alguma coisa
+      // Atualizar o token no contexto
+      setToken(response.data.token);
+
+      reset();
+      setError('');
+      navigate('/home');
+    } catch (err) {
+      setError('Falha ao logar. Por favor, verifique os dados informados. ');
+      console.error(err)
+    }
+  }, [reset, setToken, navigate]);
+
+  // Seta o erro como vazio sempre que for digitado alguma coisa
   const handleInputChange = () => {
     if (error) setError('');
   };
@@ -67,5 +75,3 @@ export const Login = () => {
     </Container>
   );
 };
-
-export default Login;
